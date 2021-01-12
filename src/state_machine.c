@@ -212,7 +212,7 @@ static struct transition *get_transition( struct state_machine *fsm,
     return NULL;
 }
 
-char statem_stopped( struct state_machine *state_machine )
+int statem_stopped( struct state_machine *state_machine )
 {
     if ( !state_machine )
     {
