@@ -32,7 +32,7 @@ void statem_init( struct state_machine *fsm,
 {
     if ( !fsm )
     {
-      return;
+        return;
     }
 
     fsm->state_current = state_init;
@@ -206,16 +206,16 @@ static struct transition *get_transition( struct state_machine *fsm,
         }
     }
 
-   /* No transitions found for given event for given state: */
-   return NULL;
+    /* No transitions found for given event for given state: */
+    return NULL;
 }
 
 char statem_stopped( struct state_machine *state_machine )
 {
-   if ( !state_machine )
-   {
-      return -1;
-   }
+    if ( !state_machine )
+    {
+        return -1;
+    }
 
-   return (state_machine->state_current->transition_nums == 0);
+    return (state_machine->state_current->transition_nums == 0);
 }
