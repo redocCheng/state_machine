@@ -382,7 +382,7 @@ struct state_machine
  * \param state_error pointer to a state that acts a final state and notifies
  * the system/user that an error has occurred.
  */
-void statem_init( struct state_machine *state_machine,
+ int statem_init( struct state_machine *state_machine,
       struct state *state_init, struct state *state_error );
 
 /**
