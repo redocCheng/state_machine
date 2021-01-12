@@ -4,6 +4,9 @@
 
 state_machine是基于RT-Thread格式移植的状态机软件包。
 state_machine的作者是misje, github地址: https://github.com/misje/stateMachine
+对该软件包进行了如下修改:
+1.修复部分函数反馈，由void改为int，如果异常反馈负数；
+2.修改状态儿子数的判断，如果这个状态没有儿子，还需要判断它的父亲（原作者不判断父亲，该状态会停掉）；
 
 
 ## 使用方法
