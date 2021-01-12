@@ -27,17 +27,19 @@ static void go_to_state_error( struct state_machine *state_machine,
 static struct transition *get_transition( struct state_machine *state_machine,
       struct state *state, struct event *const event );
 
-void statem_init( struct state_machine *fsm,
+int statem_init( struct state_machine *fsm,
       struct state *state_init, struct state *state_error )
 {
     if ( !fsm )
     {
-        return;
+        return -1;
     }
 
     fsm->state_current = state_init;
     fsm->state_previous = NULL;
     fsm->state_error = state_error;
+      
+    return 0;      
 }
 
 int statem_handle_event( struct state_machine *fsm, struct event *event )
