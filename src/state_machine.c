@@ -53,8 +53,8 @@ int statem_handle_event( struct state_machine *fsm, struct event *event )
         return STATEM_ERR_STATE_RECHED;
     }
 
-    /* Èç¹ûÕâ¸ö×´Ì¬Ã»ÓĞ¶ù×Ó£¬²»ÓÃ×ªÒÆÁË,ÄÇËû×Ô¼ºÊÇ¶ù×ÓÂğ£¬ÊÇµÄ£¬ÔÚÉÏÒ»´Î×ªÒÆ¾ÍÅĞ¶ÏÁË */
-    if ( !fsm->state_current->transition_nums )
+    /* å¦‚æœè¿™ä¸ªçŠ¶æ€æ²¡æœ‰å„¿å­ï¼Œä¸ç”¨è½¬ç§»äº†,é‚£ä»–è‡ªå·±æ˜¯å„¿å­å— */
+    if ( (!fsm->state_current->transition_nums) && (!fsm->state_current->state_parent))
     {
         return STATEM_STATE_NOCHANGE;
     }
@@ -67,7 +67,7 @@ int statem_handle_event( struct state_machine *fsm, struct event *event )
         /* If there were no transitions for the given event for the current
         * state, check if there are any transitions for any of the parent
         * states (if any): */
-        /*  continue²¢²»»áÌø¹ıwhileµÄÌõ¼şÅĞ¶Ï */
+        /*  continueå¹¶ä¸ä¼šè·³è¿‡whileçš„æ¡ä»¶åˆ¤æ–­ */
         if ( !transition )
         {
             state_next = state_next->state_parent;
@@ -128,7 +128,7 @@ int statem_handle_event( struct state_machine *fsm, struct event *event )
 
         /* If the new state is a final state, notify user that the state
         * machine has stopped: */
-        /* ÏÂÒ»¸ö×´Ì¬Ã»ÓĞ¶ù×Ó,ÄãÕâ¸ö¾ÍÊÇ×îºóÒ»´úÁË£¬²»»áÔÙÌø×ªÁË */
+        /* ä¸‹ä¸€ä¸ªçŠ¶æ€æ²¡æœ‰å„¿å­,ä½ è¿™ä¸ªå°±æ˜¯æœ€åä¸€ä»£äº†ï¼Œä¸ä¼šå†è·³è½¬äº† */
         if ( !fsm->state_current->transition_nums )
         {
             return STATEM_FINAL_STATE_RECHED;
@@ -166,7 +166,7 @@ static void go_to_state_error( struct state_machine *fsm,
     fsm->state_previous = fsm->state_current;
     fsm->state_current = fsm->state_error;
 
-    /* ±¾µØ´íÎó×´Ì¬ÒªÖ´ĞĞ½øÈë£¬½øÈë´íÎó×´Ì¬¿Ï¶¨ÊÇÊı¾İÉèÖÃ´íÎó£¬²»ÊÇ×´Ì¬»ú²»·ûºÏÂß¼­ */
+    /* æœ¬åœ°é”™è¯¯çŠ¶æ€è¦æ‰§è¡Œè¿›å…¥ï¼Œè¿›å…¥é”™è¯¯çŠ¶æ€è‚¯å®šæ˜¯æ•°æ®è®¾ç½®é”™è¯¯ï¼Œä¸æ˜¯çŠ¶æ€æœºä¸ç¬¦åˆé€»è¾‘ */
     if ( fsm->state_current && fsm->state_current->action_entry )
     {
         fsm->state_current->action_entry( fsm->state_current->data, event );
@@ -190,9 +190,9 @@ static struct transition *get_transition( struct state_machine *fsm,
         /* A transition for the given event has been found: */
         if ( t->event_type == event->type )
         {
-            /* ÂÖÑ¯¼àÊÓ£¬Èç¹ûÃ»ÓĞ¼àÊÓ£¬»òÕß¼àÊÓ²âÊÔÍ¨¹ı·µ»ØÕâ¸ö×ªÒÆ
-             * ¼àÊÓÊäÈëÌõ¼şºÍÊÂ¼ş£¬¿ÉÒÔ×ö³Éµ±Ç°×ªÒÆµÄÌõ¼şÒªºÍÊÂ¼şµÄÊı¾İÎÇºÏ
-             * Ò²¿ÉÒÔ×ö³Éµ±Ç°Ìõ¼şÒª·ûºÏÊ²Ã´£¬ÊÂ¼şµÄÊı¾İ²ÎÊıÒª·ûºÏÊ²Ã´
+            /* è½®è¯¢ç›‘è§†ï¼Œå¦‚æœæ²¡æœ‰ç›‘è§†ï¼Œæˆ–è€…ç›‘è§†æµ‹è¯•é€šè¿‡è¿”å›è¿™ä¸ªè½¬ç§»
+             * ç›‘è§†è¾“å…¥æ¡ä»¶å’Œäº‹ä»¶ï¼Œå¯ä»¥åšæˆå½“å‰è½¬ç§»çš„æ¡ä»¶è¦å’Œäº‹ä»¶çš„æ•°æ®å»åˆ
+             * ä¹Ÿå¯ä»¥åšæˆå½“å‰æ¡ä»¶è¦ç¬¦åˆä»€ä¹ˆï¼Œäº‹ä»¶çš„æ•°æ®å‚æ•°è¦ç¬¦åˆä»€ä¹ˆ
              */
             if ( !t->guard )
             {
