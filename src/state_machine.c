@@ -130,8 +130,8 @@ int statem_handle_event( struct state_machine *fsm, struct event *event )
 
         /* If the new state is a final state, notify user that the state
         * machine has stopped: */
-        /* 下一个状态没有儿子,你这个就是最后一代了，不会再跳转了 */
-        if ( !fsm->state_current->transition_nums )
+        /* 下一个状态没有儿子,也没有父亲，你们家只有你了 */
+        if ((!fsm->state_current->transition_nums) && (!fsm->state_current->state_parent))
         {
             return STATEM_FINAL_STATE_RECHED;
         }
