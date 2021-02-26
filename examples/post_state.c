@@ -14,7 +14,6 @@
 #include "state.h"
 #include <ulog.h>
 
-
 /*  post state graph
  *
  *  
@@ -36,11 +35,19 @@
  * 
  */
 
+enum event_post_type 
+{
+    EVENT_POST_NULL,
+    EVENT_POST_START,
+    EVENT_POST_BREAKON,
+    EVENT_POST_BREAKOFF,
+    EVENT_POST_ANSWER,
 
+    EVENT_POST_NUMS,
+};
 
 static struct state state_root, state_post, state_postpass, state_postfail,
                     state_postbreak;
-
 
 static void print_msg_err( void *state_data, struct event *event );
 static void print_msg_enter( void *state_data, struct event *event );
@@ -54,7 +61,6 @@ static void action_post_pass( void *oldstate_data, struct event *event,
       void *state_new_data );
 static void action_post_fail( void *oldstate_data, struct event *event,
       void *state_new_data );
-
 
 static struct state state_root = {
     .state_parent = NULL,
