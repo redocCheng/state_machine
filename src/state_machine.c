@@ -107,6 +107,8 @@ int statem_handle_event( struct state_machine *fsm, struct event *event )
             transition->action( fsm->state_current->data, event, state_next->data );
         }
 
+        fsm->state_previous = fsm->state_current;
+        
         /* Call the new state's entry action if it has any (only if state does
         * not return to itself): */
         if ( state_next != fsm->state_current && state_next->action_entry )
@@ -114,7 +116,6 @@ int statem_handle_event( struct state_machine *fsm, struct event *event )
             state_next->action_entry( state_next->data, event );
         }
 
-        fsm->state_previous = fsm->state_current;
         fsm->state_current = state_next;
 
         /* If the state returned to itself: */
